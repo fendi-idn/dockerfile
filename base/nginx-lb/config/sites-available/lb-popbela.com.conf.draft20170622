@@ -1,0 +1,91 @@
+upstream www.popbela.com {
+        server  10.100.100.171:80;
+}
+
+server {
+        listen 80;
+        server_name popbela.com;
+        return 301 http://www.$server_name$request_uri;
+        access_log off;
+}
+
+server {
+        listen 80 reuseport;
+        server_name www.popbela.com fashion.popbela.com beauty.popbela.com relationship.popbela.com career.popbela.com popblogger.popbela.com ramadan.popbela.com;
+        include includes/security.conf;
+
+#        access_log /mnt/backup/var/log/nginx/popbela.com.access.log combined buffer=4k;
+        access_log syslog:server=10.200.200.110,tag=lbpopbela combined;
+
+        # Media: images, icons, video, audio, HTC
+        location ~* \.(?:css|js|jpg|jpeg|gif|png|ico|cur|gz|svg|svgz|mp4|ogg|ogv|webm|htc)$ {
+                expires 1M;
+                access_log off;
+                add_header Cache-Control "public";
+                proxy_pass http://www.popbela.com;
+                include proxy_params;
+                proxy_set_header HTTPS "";
+                proxy_next_upstream error timeout http_502 http_503 http_504;
+                include includes/proxy-cache.conf;
+        }
+
+        location / {
+                proxy_pass http://www.popbela.com;
+                include proxy_params;
+                proxy_set_header HTTPS "";
+                proxy_next_upstream error timeout http_502 http_503 http_504;
+                include includes/proxy-cache.conf;
+        }
+}
+
+upstream ssl-www.popbela.com {
+        server  10.100.100.171:443;
+}
+
+server {
+        listen 443 ssl http2;
+        server_name popbela.com;
+        return 301 https://www.$server_name$request_uri;
+        access_log off;
+}
+
+server {
+        listen 443 ssl http2 reuseport default_server;
+        server_name www.popbela.com fashion.popbela.com beauty.popbela.com relationship.popbela.com career.popbela.com popblogger.popbela.com ramadan.popbela.com;
+        include includes/security.conf;
+
+#        access_log /mnt/backup/var/log/nginx/popbela.com.access.log combined buffer=4k;
+        access_log syslog:server=10.200.200.110,tag=lbpopbela combined;
+
+        # HTTP2.0 is very efficient, 1 connection per session
+        keepalive_timeout 300; # up from 65 secs default
+	ssl_certificate         /etc/nginx/tls/star.popbela.com.crt;
+        ssl_certificate_key     /etc/nginx/tls/star.popbela.com.key;
+        ssl_dhparam             /etc/nginx/tls/dhparams.pem;
+
+        # OCSP stapling...
+        ssl_stapling on;
+        ssl_stapling_verify on;
+        ssl_trusted_certificate /etc/nginx/tls/comodo-ca-bundle.crt;
+        resolver 8.8.8.8 203.119.13.77;
+
+        # CSS, JS, and Media: images, icons, video, audio, HTC
+        location ~* \.(?:css|js|jpg|jpeg|gif|png|ico|cur|gz|svg|svgz|mp4|ogg|ogv|webm|htc)$ {
+                expires 1M;
+                access_log off;
+                add_header Cache-Control "public";
+                proxy_pass https://ssl-www.popbela.com;
+                include proxy_params;
+                proxy_set_header HTTPS "on";
+                proxy_next_upstream error timeout http_502 http_503 http_504;
+                include includes/proxy-cache.conf;
+        }
+
+       location / {
+                proxy_pass https://ssl-www.popbella.com;
+                include proxy_params;
+                proxy_set_header HTTPS "on";
+                proxy_next_upstream error timeout http_502 http_503 http_504;
+                include includes/proxy-cache.conf;
+        }
+}

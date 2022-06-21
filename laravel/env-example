@@ -1,0 +1,137 @@
+############################
+# General Setup
+############################
+
+### Application Path
+# Point to your application code, will be available at `/var/www`.
+
+APPLICATION=~/Sites/
+APPLICATION_DIRECTORY=~/Sites/
+
+### Data Path:
+# For all storage systems.
+
+DATA_SAVE_PATH=~/.laradock/data
+
+### PHP version
+# Applies to the Workspace and PHP-FPM containers (Does not apply to HHVM)
+# Accepted values: 72 - 71 - 70
+
+PHP_VERSION=72
+
+### PHP interpreter
+# Accepted values: hhvm - php-fpm
+
+PHP_INTERPRETER=php-fpm
+
+############################
+# Containers Customization
+############################
+
+### WORKSPACE ##########################################################################################################
+
+WORKSPACE_INSTALL_XDEBUG=true
+WORKSPACE_INSTALL_SOAP=true
+WORKSPACE_INSTALL_MONGO=true
+WORKSPACE_INSTALL_PHPREDIS=true
+WORKSPACE_INSTALL_NODE=true
+WORKSPACE_INSTALL_YARN=true
+WORKSPACE_COMPOSER_GLOBAL_INSTALL=true
+WORKSPACE_INSTALL_WORKSPACE_SSH=true
+WORKSPACE_INSTALL_LARAVEL_ENVOY=true
+WORKSPACE_INSTALL_LARAVEL_INSTALLER=true
+WORKSPACE_INSTALL_DEPLOYER=true
+WORKSPACE_PUID=1000
+WORKSPACE_PGID=1000
+WORKSPACE_CHROME_DRIVER_VERSION=2.32
+WORKSPACE_NODE_VERSION=stable
+WORKSPACE_YARN_VERSION=latest
+WORKSPACE_TIMEZONE=Asia/Jakarta
+WORKSPACE_SSH_PORT=2222
+
+### NGINX ##############################################################################################################
+
+NGINX_HOST_HTTP_PORT=80
+NGINX_HOST_HTTPS_PORT=443
+NGINX_HOST_LOG_PATH=./logs/nginx/
+NGINX_CONFIG_PATH=./nginx/config/
+NGINX_PHP_UPSTREAM_CONTAINER=php-fpm
+NGINX_PHP_UPSTREAM_PORT=9000
+
+### MYSQL ##############################################################################################################
+
+MYSQL_VERSION=5.7
+MYSQL_DATABASE=default
+MYSQL_USER=default
+MYSQL_PASSWORD=secret
+MYSQL_PORT=3306
+MYSQL_ROOT_PASSWORD=root
+MYSQL_ENTRYPOINT_INITDB=./mysql/docker-entrypoint-initdb.d
+
+### REDIS ##############################################################################################################
+
+REDIS_PORT=6379
+
+### MARIADB ############################################################################################################
+
+MARIADB_VERSION=10.2
+MARIADB_DATABASE=default
+MARIADB_USER=default
+MARIADB_PASSWORD=secret
+MARIADB_PORT=3306
+MARIADB_ROOT_PASSWORD=root
+MARIADB_ENTRYPOINT_INITDB=./mariadb/docker-entrypoint-initdb.d
+
+### PHP MY ADMIN #######################################################################################################
+
+# Accepted values: mariadb - mysql
+
+PMA_DB_ENGINE=mysql
+
+# Credentials/Port:
+
+PMA_USER=default
+PMA_PASSWORD=secret
+PMA_ROOT_PASSWORD=secret
+PMA_PORT=8080
+
+### MAILDEV ############################################################################################################
+
+MAILDEV_HTTP_PORT=1080
+MAILDEV_SMTP_PORT=25
+
+### MONGODB ############################################################################################################
+
+MONGODB_PORT=27017
+
+### DOCKER-SYNC ################################################################################################
+
+# osx: 'native_osx' (default)
+# windows: 'unison'
+# linux: docker-sync not required
+
+DOCKER_SYNC_STRATEGY=native_osx
+
+##### TO BE CONTINUE .................................
+
+# ......... Missing: neo4j mongo rethinkdb redis aerospike pgadmin...
+# .........
+# .........
+
+############################
+# Miscellaneous
+############################
+
+# Replace with your Docker Host IP (will be appended to /etc/hosts)
+
+DOCKER_HOST_IP=192.168.65.2
+
+
+# The Remote Interpreter entry matching name `laradock`
+
+PHP_IDE_CONFIG=serverName=laravel
+
+
+# Fix for windows users to make sure the application path works.
+
+COMPOSE_CONVERT_WINDOWS_PATHS=1

@@ -1,0 +1,11 @@
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName = @alt_names
+[alt_names]
+DNS.1 = localhost
+DNS.2 = idntimes.local
+DNS.3 = popbela.local
+DNS.4 = popmama.local
+DNS.5 = yummy.local
+DNS.6 = fortuneidn.local

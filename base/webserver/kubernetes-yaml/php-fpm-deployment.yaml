@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.3.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: php-fpm
+  name: php-fpm
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: php-fpm
+    spec:
+      containers:
+      - image: localhost:5000/php-fpm:stable
+        name: php-fpm
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/www
+          name: app-dir-0001-claim
+      restartPolicy: Always
+      volumes:
+      - name: app-dir-0001-claim
+        persistentVolumeClaim:
+          claimName: app-dir-0001-claim
+status: {}

@@ -1,0 +1,345 @@
+version: '3'
+
+services:
+
+### Workspace Utilities Container ###########################
+
+    workspace:
+      hostname: workspace
+      image: mbakmia.idntimes.com:45335/dockerfile/workspace:${PHP_VERSION}
+      volumes:
+        - ${APPLICATION_DIRECTORY}:/var/www
+      extra_hosts:
+        - "dockerhost:${DOCKER_HOST_IP}"
+        - "contributor.idntimes.local:${DOCKER_HOST_IP}"
+        - "api.idntimes.local:${DOCKER_HOST_IP}"
+        - "mobile-api.idntimes.local:${DOCKER_HOST_IP}"
+        - "post-api.idntimes.local:${DOCKER_HOST_IP}"
+        - "user-api.idntimes.local:${DOCKER_HOST_IP}"
+        - "community-api.idntimes.local:${DOCKER_HOST_IP}"
+        - "external-api.idntimes.local:${DOCKER_HOST_IP}"
+        - "log-api.idntimes.local:${DOCKER_HOST_IP}"
+        - "general-api.idntimes.local:${DOCKER_HOST_IP}"
+        - "api.popbela-v2.local:${DOCKER_HOST_IP}"
+        - "mobile-api.popbela.local:${DOCKER_HOST_IP}"
+        - "post-api.popbela.local:${DOCKER_HOST_IP}"
+        - "user-api.popbela.local:${DOCKER_HOST_IP}"
+        - "forum-api.popbela.local:${DOCKER_HOST_IP}"
+        - "external-api.popbela.local:${DOCKER_HOST_IP}"
+        - "log-api.popbela.local:${DOCKER_HOST_IP}"
+        - "papaya.idntimes.local:${DOCKER_HOST_IP}"
+        - "hikaru.popmama.local:${DOCKER_HOST_IP}"
+        - "www.popmama.local:${DOCKER_HOST_IP}"
+        - "komugi.popmama.local:${DOCKER_HOST_IP}"
+        - "api.popmama.local:${DOCKER_HOST_IP}"
+        - "redback.idntimes.local:${DOCKER_HOST_IP}"
+        - "cron.popmama.local:${DOCKER_HOST_IP}"
+        - "community.idntimes.local:${DOCKER_HOST_IP}"
+        - "horizon.idntimes.local:${DOCKER_HOST_IP}"
+        - "internal-api.popmama.local:${DOCKER_HOST_IP}"
+        - "moderator.idntimes.local:${DOCKER_HOST_IP}"
+        - "recipe-api.yummy.local:${DOCKER_HOST_IP}"
+        - "user-api.yummy.local:${DOCKER_HOST_IP}"
+        - "community-api.yummy.local:${DOCKER_HOST_IP}"
+        - "qna-api.idntimes.local:${DOCKER_HOST_IP}"
+        - "myaccount.popmama.local:${DOCKER_HOST_IP}"
+        - "idntimes.local:${DOCKER_HOST_IP}"
+      ports:
+        - "${WORKSPACE_SSH_PORT}:22"
+      networks:
+        - frontend
+        - backend
+
+### PHP-FPM Container #######################################
+
+    php-fpm:
+      hostname: php-fpm
+      image: mbakmia.idntimes.com:45335/dockerfile/php-fpm:${PHP_VERSION}
+      volumes:
+        - /mnt/c/Users/idnti/IDN-Media/Repos/dockerfile/laravel/php-fpm/config/php.ini:/usr/local/etc/php/php.ini
+        - ${APPLICATION_DIRECTORY}:/var/www
+      expose:
+        - "9000"
+      extra_hosts:
+        - "dockerhost:${DOCKER_HOST_IP}"
+        - "contributor.idntimes.local:${DOCKER_HOST_IP}"
+        - "api.idntimes.local:${DOCKER_HOST_IP}"
+        - "mobile-api.idntimes.local:${DOCKER_HOST_IP}"
+        - "post-api.idntimes.local:${DOCKER_HOST_IP}"
+        - "user-api.idntimes.local:${DOCKER_HOST_IP}"
+        - "community-api.idntimes.local:${DOCKER_HOST_IP}"
+        - "external-api.idntimes.local:${DOCKER_HOST_IP}"
+        - "log-api.idntimes.local:${DOCKER_HOST_IP}"
+        - "general-api.idntimes.local:${DOCKER_HOST_IP}"
+        - "api.popbela-v2.local:${DOCKER_HOST_IP}"
+        - "mobile-api.popbela.local:${DOCKER_HOST_IP}"
+        - "post-api.popbela.local:${DOCKER_HOST_IP}"
+        - "user-api.popbela.local:${DOCKER_HOST_IP}"
+        - "forum-api.popbela.local:${DOCKER_HOST_IP}"
+        - "external-api.popbela.local:${DOCKER_HOST_IP}"
+        - "log-api.popbela.local:${DOCKER_HOST_IP}"
+        - "papaya.idntimes.local:${DOCKER_HOST_IP}"
+        - "hikaru.popmama.local:${DOCKER_HOST_IP}"
+        - "www.popmama.local:${DOCKER_HOST_IP}"
+        - "komugi.popmama.local:${DOCKER_HOST_IP}"
+        - "redback.idntimes.local:${DOCKER_HOST_IP}"
+        - "cron.popmama.local:${DOCKER_HOST_IP}"
+        - "community.idntimes.local:${DOCKER_HOST_IP}"
+        - "horizon.idntimes.local:${DOCKER_HOST_IP}"
+        - "internal-api.popmama.local:${DOCKER_HOST_IP}"
+        - "moderator.idntimes.local:${DOCKER_HOST_IP}"
+        - "recipe-api.yummy.local:${DOCKER_HOST_IP}"
+        - "user-api.yummy.local:${DOCKER_HOST_IP}"
+        - "community-api.yummy.local:${DOCKER_HOST_IP}"
+        - "qna-api.idntimes.local:${DOCKER_HOST_IP}"
+        - "myaccount.popmama.local:${DOCKER_HOST_IP}"
+        - "idntimes.local:${DOCKER_HOST_IP}"
+      environment:
+        - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
+      networks:
+        - backend
+
+### NGINX Server Container ##################################
+
+    nginx:
+      hostname: nginx
+      image: mbakmia.idntimes.com:45335/dockerfile/nginx:latest
+      volumes:
+        - ${APPLICATION_DIRECTORY}:/var/www
+        - ${NGINX_CONFIG_PATH}:/etc/nginx
+        - ${NGINX_HOST_LOG_PATH}:/var/log/nginx
+      ports:
+        - "${NGINX_HOST_HTTP_PORT}:80"
+        - "${NGINX_HOST_HTTPS_PORT}:443"
+      depends_on:
+        - php-fpm
+      networks:
+        - frontend
+        - backend
+      extra_hosts:
+        - "wsl_host:${WSL_HOST}"
+
+### MySQL Container #########################################
+
+    mysql:
+      hostname: mysql
+      image: mbakmia.idntimes.com:45335/dockerfile/mysql:${MYSQL_VERSION}
+      environment:
+        - MYSQL_DATABASE=${MYSQL_DATABASE}
+        - MYSQL_USER=${MYSQL_USER}
+        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      volumes:
+        - /mnt/c/Users/idnti/IDN-Media/Repos/dockerfile/laravel/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+        - ${DATA_SAVE_PATH}/mysql:/var/lib/mysql
+        - ${MYSQL_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
+      ports:
+        - "${MYSQL_PORT}:3306"
+      networks:
+        - backend
+        
+### MariaDB Container #######################################
+
+#    mariadb:
+#      hostname: mariadb
+#      image: mbakmia.idntimes.com:45335/dockerfile/mariadb:${MARIADB_VERSION}
+#      volumes:
+#        - ./mariadb/my.cnf:/etc/mysql/conf.d/my.cnf
+#        - ${DATA_SAVE_PATH}/mariadb:/var/lib/mysql
+#        - ${MARIADB_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
+#      ports:
+#        - "${MARIADB_PORT}:3306"
+#      environment:
+#        - MYSQL_DATABASE=${MARIADB_DATABASE}
+#        - MYSQL_USER=${MARIADB_USER}
+#        - MYSQL_PASSWORD=${MARIADB_PASSWORD}
+#        - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+#      networks:
+#        - backend
+
+### MongoDB Container #######################################
+
+    mongo:
+      hostname: mongo
+      image: mbakmia.idntimes.com:45335/dockerfile/mongo:latest
+      ports:
+        - "${MONGODB_PORT}:27017"
+      volumes:
+        - /data/db
+      networks:
+        - backend
+
+### Redis Container #########################################
+
+    redis:
+      hostname: redis
+      image: mbakmia.idntimes.com:45335/dockerfile/redis:latest
+      volumes:
+        - ${DATA_SAVE_PATH}/redis:/data
+      ports:
+        - "${REDIS_PORT}:6379"
+      networks:
+        - backend
+
+### RabbitMQ #############################################
+    # rabbitmq:
+    #   hostname: rabbitmq
+    #   image: mbakmia.idntimes.com:45335/rabbitmq:latest
+    #   ports:
+    #     - "${RABBITMQ_NODE_HOST_PORT}:5672"
+    #     - "${RABBITMQ_MANAGEMENT_HTTP_HOST_PORT}:15672"
+    #     - "${RABBITMQ_MANAGEMENT_HTTPS_HOST_PORT}:15671"
+    #   privileged: true
+    #   environment:
+    #     - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+    #     - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+    #   volumes:
+    #     - ${DATA_SAVE_PATH}/rabbitmq:/var/lib/rabbitmq
+    #   networks:
+    #     - backend
+
+### hansip ####################################
+
+    hansip:
+      image: mbakmia.idntimes.com:45335/idnmedia/go/hansip:latest
+      # build:
+      #   context: ../../hansip
+      #   dockerfile: .docker/Dockerfile
+      container_name: hansip
+      environment:
+        - AAA_SERVER_HOST=${AAA_SERVER_HOST}
+        - AAA_SERVER_PORT=${AAA_SERVER_PORT}
+        - AAA_SERVER_TIMEOUT_WRITE=${AAA_SERVER_TIMEOUT_WRITE}
+        - AAA_SERVER_TIMEOUT_READ=${AAA_SERVER_TIMEOUT_READ}
+        - AAA_SERVER_TIMEOUT_IDLE=${AAA_SERVER_TIMEOUT_IDLE}
+        - AAA_SERVER_TIMEOUT_GRACESHUT=${AAA_SERVER_TIMEOUT_GRACESHUT}
+        - AAA_SETUP_ADMIN_ENABLE=${AAA_SETUP_ADMIN_ENABLE}
+        - AAA_SERVER_LOG_LEVEL=${AAA_SERVER_LOG_LEVEL}
+        - AAA_DB_TYPE=${AAA_DB_TYPE}
+        - AAA_DB_MYSQL_USER=${AAA_DB_MYSQL_USER}
+        - AAA_DB_MYSQL_PASSWORD=${AAA_DB_MYSQL_PASSWORD}
+      networks:
+        backend:
+          aliases:
+            - hansip-idn.media
+      ports:
+        - "3000:3000"
+      
+### rabbitmq ####################################
+
+    rabbitmq:
+      image: rabbitmq:3-management
+      # build:
+      #   context: ../../account-migrate
+      #   dockerfile: rabbitMQ.dockerfile
+      container_name: rabbitmq
+      networks:
+        backend:
+          aliases:
+            - rabbitmq
+      ports:
+          - 5672:5672
+          - 15672:15672
+      # healthcheck:
+      #     test: ["CMD", "curl", "-f", "http://localhost:15672"]
+      #     interval: 30s
+      #     timeout: 10s
+      #     retries: 5
+
+###  MIG  ####################################
+
+    mig:
+      image: mbakmia.idntimes.com:45335/idnmedia/go/mig
+      # build:
+      #   context: ../../account-migrate
+      #   dockerfile: Dockerfile
+      container_name: idn-core
+      environment:
+        - IDNAC_POPMAMA_API_BASE_URI=${IDNAC_POPMAMA_API_BASE_URI}
+        - IDNAC_POPMAMA_API_KEY=${IDNAC_POPMAMA_API_KEY}
+        - IDNAC_IDNTIMES_API_BASE_URI=${IDNAC_IDNTIMES_API_BASE_URI}
+        - IDNAC_IDNTIMES_API_KEY=${IDNAC_IDNTIMES_API_KEY}
+        - IDNAC_HANSIP_API_BASE_URI=${IDNAC_HANSIP_API_BASE_URI}
+        - IDNAC_HANSIP_API_KEY=${IDNAC_HANSIP_API_KEY}
+        - IDNAC_RABBITMQ_AQMP_URI=${IDNAC_RABBITMQ_AQMP_URI}
+      restart: on-failure
+      depends_on:
+        - rabbitmq
+        - hansip
+        # hansip:
+        #   condition: service_started
+        # rabbitmq:
+        #   condition: service_healthy
+      networks:
+        backend:
+          aliases:
+            - mig-idn.media
+      ports:
+        - "4000:4000"
+
+
+### phpMyAdmin Container ####################################
+
+#    phpmyadmin:
+#      hostname: phpmyadmin
+#      image: mbakmia.idntimes.com:45335/dockerfile/phpmyadmin:latest
+#      environment:
+#        - PMA_ARBITRARY=1
+#        - MYSQL_USER=${PMA_USER}
+#        - MYSQL_PASSWORD=${PMA_PASSWORD}
+#        - MYSQL_ROOT_PASSWORD=${PMA_ROOT_PASSWORD}
+#      ports:
+#        - "${PMA_PORT}:80"
+#      depends_on:
+#        - "${PMA_DB_ENGINE}"
+#      networks:
+#        - frontend
+#        - backend
+
+### MailDev Container #######################################
+
+    maildev:
+      hostname: maildev
+      image: mbakmia.idntimes.com:45335/dockerfile/maildev:latest
+      ports:
+        - "${MAILDEV_HTTP_PORT}:80"
+        - "${MAILDEV_SMTP_PORT}:25"
+      networks:
+        - frontend
+        - backend
+
+# ### Node JS Container #######################################
+
+#     nodejs:
+#       hostname: nodejs
+#       build: nodejs
+#       networks:
+#         - frontend
+#         - backend
+#       expose:
+#         - "5005"
+#       volumes:
+#         - ${APPLICATION_DIRECTORY}:/app
+
+### Networks Setup ############################################
+
+networks:
+  frontend:
+    driver: "bridge"
+  backend:
+    driver: "bridge"
+
+### Volumes Setup #############################################
+
+volumes:
+  mysql:
+    driver: local
+  redis:
+    driver: local
+  mariadb:
+    driver: local
+  phpmyadmin:
+    driver: local
+  mongo:
+    driver: local
+  

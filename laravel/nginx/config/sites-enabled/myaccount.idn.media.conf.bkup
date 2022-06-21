@@ -1,0 +1,35 @@
+server {
+    listen 80;
+    server_name myaccount.popmama.local myaccount.idntimes.local myaccount.popmama.help myaccount.idntimes.help;
+    return 301 https://$server_name$request_uri;
+    access_log off;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name myaccount.popmama.local myaccount.idntimes.local myaccount.popmama.help myaccount.idntimes.help;
+    root /usr/share/nginx/html;
+    index index.html index.htm;
+    access_log off;
+
+    # HTTP2.0 is very efficient, 1 connection per session
+    keepalive_timeout 300; # up from 65 secs default
+
+    include includes/realip.conf;
+
+    ssl_certificate         /etc/nginx/tls/localhost.crt;
+    ssl_certificate_key     /etc/nginx/tls/localhost.key;
+    ssl_dhparam             /etc/nginx/tls/dhparams.pem;
+
+    location / {
+        proxy_pass				http://nodejs:5005/;
+        proxy_set_header Host			$http_host;
+        proxy_set_header X-Real-IP		$remote_addr;
+        proxy_set_header X-Forwarded-For      	$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto    	"https";
+    }
+
+    location ~ /\.ht {
+            deny all;
+    }
+}

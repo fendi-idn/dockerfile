@@ -1,0 +1,14 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: nginx-config-0001
+  labels:
+    type: local
+spec:
+  storageClassName: nginx-config-0001
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/Users/donny/Docker/base/webserver/nginx-config-dev"

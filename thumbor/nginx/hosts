@@ -1,0 +1,8 @@
+127.0.0.1	post-api.idntimes.local
+127.0.0.1	user-api.idntimes.local
+127.0.0.1	media-api.idntimes.local
+127.0.0.1	general-api.idntimes.local
+127.0.0.1	community-api.idntimes.local
+127.0.0.1	search-api.idntimes.local
+127.0.0.1	external-api.idntimes.local
+127.0.0.1	log-api.idntimes.local

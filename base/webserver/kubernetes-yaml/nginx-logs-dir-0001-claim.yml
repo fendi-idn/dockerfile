@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nginx-logs-dir-0001-claim
+  name: nginx-logs-dir-0001-claim
+spec:
+  storageClassName: nginx-logs-dir-0001
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: {}

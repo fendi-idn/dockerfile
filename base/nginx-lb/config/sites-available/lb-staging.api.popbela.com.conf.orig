@@ -1,0 +1,51 @@
+upstream staging.api.popbela.com {
+        server  10.100.100.109:443;
+}
+
+server {
+        listen 80;
+        server_name staging.api.popbela.com;
+        return 301 https://$server_name$request_uri;
+        access_log off;
+}
+
+server {
+        listen 443 ssl http2;
+        server_name staging.api.popbela.com;
+	include includes/security.conf;
+
+        access_log /var/log/nginx/staging.api.popbela.com.access.log combined buffer=4k;
+
+        ##
+        # Custom header for idntimes.com
+        ##
+        add_header Access-Control-Allow-Origin "*";
+        add_header Access-Control-Allow-Methods "GET, POST";
+
+        # Remember the certificate for a year and automatically connect to HTTPS
+        #add_header Strict-Transport-Security 'max-age=31536000; includeSubDomains';
+        #add_header Strict-Transport-Security 'max-age=31536000';
+
+	# HTTP2.0 is very efficient, 1 connection per session
+	keepalive_timeout 300; # up from 65 secs default
+
+        ssl_certificate		/etc/nginx/tls/star.idntimes.com.crt;
+        ssl_certificate_key	/etc/nginx/tls/star.idntimes.com.key;
+        ssl_dhparam		/etc/nginx/tls/dhparams.pem;
+
+        # OCSP stapling...
+        ssl_stapling on;
+        ssl_stapling_verify on;
+        ssl_trusted_certificate	/etc/nginx/tls/comodo-ca-bundle.crt;
+        resolver 8.8.8.8 203.119.13.77;
+
+        location / {
+                proxy_pass https://staging.api.popbela.com;
+                include proxy_params;
+# uncomment below to get info about upstream in header
+                add_header  X-Upstream  $upstream_addr;
+		proxy_set_header HTTPS "on";
+                proxy_next_upstream error timeout http_502 http_503 http_504;
+                include includes/proxy-cache.conf;
+        }
+}

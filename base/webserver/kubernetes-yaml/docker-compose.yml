@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+
+### PHP-FPM #############################
+
+    php-fpm:
+      image: php-fpm:stable
+      volumes:
+        - /Users/donny/Sites/idntimes/idntimes.com:/var/www
+      expose:
+        - 9000
+      extra_hosts:
+        - dockerhost:10.0.75.1
+      networks:
+        - backend
+
+### NGINX ##################################
+
+    nginx:
+      image: nginx-webserver:stable
+      volumes:
+        - /Users/donny/Sites/idntimes/idntimes.com:/var/www
+        - ./nginx-config-dev/:/etc/nginx
+        - ./logs/nginx/:/var/log/nginx
+      ports:
+        - 3080:80
+        - 3443:443
+      extra_hosts:
+        - dockerhost:10.0.75.1
+      depends_on:
+        - php-fpm
+      networks:
+        - frontend
+        - backend
+      links:
+        - php-fpm
+
+### Networks Setup ############################################
+
+networks:
+  frontend:
+    driver: "overlay"
+  backend:
+    driver: "overlay"

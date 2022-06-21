@@ -1,0 +1,35 @@
+upstream www.storyworx.id {
+        server  10.100.100.166:80;
+}
+
+server {
+        listen 80;
+        server_name storyworx.id;
+        return 301 http://www.$server_name$request_uri;
+        access_log off;
+}
+
+server {
+        listen 80;
+        server_name www.storyworx.id;
+        include includes/security.conf;
+
+#        access_log /mnt/backup/var/log/nginx/storyworx.id.access.log combined buffer=4k;
+	access_log syslog:server=10.200.200.110,tag=lbstoryworx combined;
+
+        ##
+        # Custom header for idntimes.com
+        ##
+        add_header Access-Control-Allow-Origin "*";
+        add_header Access-Control-Allow-Methods "GET, POST";
+
+        location / {
+                proxy_pass http://www.storyworx.id;
+                include proxy_params;
+# uncomment below to get info about upstream in header
+#               add_header  X-Upstream  $upstream_addr;
+		proxy_set_header HTTPS "";
+                proxy_next_upstream error timeout http_502 http_503 http_504;
+                include includes/proxy-cache.conf;
+        }
+}

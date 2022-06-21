@@ -1,0 +1,23 @@
+proxy_set_header Host $http_host;
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
+
+# HTTPoxy vulnerability mitigation
+proxy_set_header Proxy "";
+
+# Common proxy_params tuning
+proxy_read_timeout 300s;
+proxy_buffer_size 128k;
+proxy_buffers 1024 4k;
+proxy_busy_buffers_size 256k;
+
+# Special proxy_param tuning
+#proxy_set_header HTTPS ""; # use this for HTTP
+#proxy_set_header HTTPS "on"; # and use this for HTTPS
+proxy_set_header Connection "";
+proxy_set_header Accept-Encoding "";
+proxy_http_version 1.1;
+#proxy_request_buffering off;
+#proxy_buffering off;
+

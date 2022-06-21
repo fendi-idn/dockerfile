@@ -1,0 +1,4 @@
+laravel/logs/*
+.DS_Store
+laravel/logs/nginx/access.log
+laravel/logs/nginx/error.log

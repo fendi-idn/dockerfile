@@ -1,0 +1,70 @@
+upstream www.idntimes.com {
+	least_conn;
+        server  10.100.100.151:443;
+        server  10.100.100.152:443;
+}
+
+server {
+        listen 80 default_server;
+###       server_name idntimes.com *.idntimes.com;
+##	Untuk redirect all subdomain ke https
+	server_name ~^(?<sub>\w+\.)idntimes\.com$;
+###        return 301 https://$server_name$request_uri;
+##	Untuk redirect all subdomain ke https    
+      return 301 https://${sub}idntimes.com$request_uri;
+        access_log off;
+}
+
+#redirect idntimes.co.id ke idntimes.com
+server {
+        listen 80;
+###       server_name idntimes.com *.idntimes.com;
+##      Untuk redirect all subdomain ke https
+        server_name ~^(?<sub>\w+\.)idntimes\.co.id$;
+###        return 301 https://$server_name$request_uri;
+##      Untuk redirect all subdomain ke https
+      return 301 https://${sub}idntimes.com$request_uri;
+        access_log off;
+}
+
+server {
+	listen 443;
+	server_name idntimes.com;
+        return 301 https://www.$server_name$request_uri;
+	access_log off;
+}
+
+server {
+        listen 443 ssl http2 reuseport default_server;
+        server_name www.idntimes.com news.idntimes.com hype.idntimes.com pilkada.idntimes.com life.idntimes.com automotive.idntimes.com business.idntimes.com sport.idntimes.com travel.idntimes.com tech.idntimes.com men.idntimes.com health.idntimes.com food.idntimes.com science.idntimes.com fiction.idntimes.com opinion.idntimes.com idntv.idntimes.com quiz.idntimes.com baikitunyata.idntimes.com ramadan.idntimes.com dummy.idntimes.com;
+	include includes/security.conf;
+
+        access_log /mnt/backup/var/log/nginx/idntimes.com.access.log combined buffer=4k;
+
+        # Remember the certificate for a year and automatically connect to HTTPS
+        #add_header Strict-Transport-Security 'max-age=31536000; includeSubDomains';
+        #add_header Strict-Transport-Security 'max-age=31536000';
+
+	# HTTP2.0 is very efficient, 1 connection per session
+	keepalive_timeout 300; # up from 65 secs default
+
+        ssl_certificate		/etc/nginx/tls/star.idntimes.com.crt;
+        ssl_certificate_key	/etc/nginx/tls/star.idntimes.com.key;
+        ssl_dhparam		/etc/nginx/tls/dhparams.pem;
+
+        # OCSP stapling...
+        ssl_stapling on;
+        ssl_stapling_verify on;
+        ssl_trusted_certificate	/etc/nginx/tls/comodo-ca-bundle.crt;
+        resolver 8.8.8.8 203.119.13.77;
+
+        location / {
+                proxy_pass https://www.idntimes.com;
+                include proxy_params;
+# uncomment below to get info about upstream in header
+#               add_header  X-Upstream  $upstream_addr;
+		proxy_set_header HTTPS "on";
+                proxy_next_upstream error timeout http_502 http_503 http_504;
+		include includes/proxy-cache.conf;
+        }
+}

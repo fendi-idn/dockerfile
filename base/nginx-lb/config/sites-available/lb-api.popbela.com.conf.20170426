@@ -1,0 +1,21 @@
+upstream api.popbela.com {
+        server  10.100.100.171:80;
+}
+
+server {
+        listen 80;
+        server_name api.popbela.com;
+        include includes/security.conf;
+
+        access_log /mnt/backup/var/log/nginx/api.popbela.com.access.log combined buffer=4k;
+
+        location / {
+                proxy_pass http://api.popbela.com;
+                include proxy_params;
+# uncomment below to get info about upstream in header
+#               add_header  X-Upstream  $upstream_addr;
+		proxy_set_header HTTPS "";
+                proxy_next_upstream error timeout http_502 http_503 http_504;
+		include includes/proxy-cache.conf;
+        }
+}

@@ -1,0 +1,28 @@
+upstream www.popbela.com {
+        server  10.100.100.171:80;
+}
+
+server {
+	listen 80;
+	server_name popbela.com;
+        return 301 http://www.$server_name$request_uri;
+	access_log off;
+}
+
+server {
+        listen 80 reuseport;
+        server_name www.popbela.com fashion.popbela.com beauty.popbela.com relationship.popbela.com career.popbela.com popblogger.popbela.com ramadan.popbela.com;
+        include includes/security.conf;
+
+        access_log /mnt/backup/var/log/nginx/popbela.com.access.log combined buffer=4k;
+
+        location / {
+                proxy_pass http://www.popbela.com;
+                include proxy_params;
+# uncomment below to get info about upstream in header
+#               add_header  X-Upstream  $upstream_addr;
+		proxy_set_header HTTPS "off";
+                proxy_next_upstream error timeout http_502 http_503 http_504;
+		include includes/proxy-cache.conf;
+        }
+}

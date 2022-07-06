@@ -27,9 +27,9 @@ services:
         - "olimpiade.idntimes.local:${DOCKER_HOST_IP}"
         - "papaya.idntimes.local:${DOCKER_HOST_IP}"
         - "post-api.idntimes.local:${DOCKER_HOST_IP}"
-        - "user-api.idntimes.local:${DOCKER_HOST_IP}"
         - "qna-api.idntimes.local:${DOCKER_HOST_IP}"
         - "redback.idntimes.local:${DOCKER_HOST_IP}"
+        - "user-api.idntimes.local:${DOCKER_HOST_IP}"
         - "www.idntimes.local:${DOCKER_HOST_IP}"
         ### Fortune ###
         - "gatsu.fortuneidn.local:${DOCKER_HOST_IP}"
@@ -88,9 +88,9 @@ services:
         - "olimpiade.idntimes.local:${DOCKER_HOST_IP}"
         - "papaya.idntimes.local:${DOCKER_HOST_IP}"
         - "post-api.idntimes.local:${DOCKER_HOST_IP}"
-        - "user-api.idntimes.local:${DOCKER_HOST_IP}"
         - "qna-api.idntimes.local:${DOCKER_HOST_IP}"
         - "redback.idntimes.local:${DOCKER_HOST_IP}"
+        - "user-api.idntimes.local:${DOCKER_HOST_IP}"
         - "www.idntimes.local:${DOCKER_HOST_IP}"
         ### Fortune ###
         - "gatsu.fortuneidn.local:${DOCKER_HOST_IP}"

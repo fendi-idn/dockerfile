@@ -31,6 +31,9 @@ services:
         - "redback.idntimes.local:${DOCKER_HOST_IP}"
         - "user-api.idntimes.local:${DOCKER_HOST_IP}"
         - "www.idntimes.local:${DOCKER_HOST_IP}"
+        ### Duniaku ###
+        - "otaku.idntimes.local:${DOCKER_HOST_IP}"
+        - "mangaka.idntimes.local:${DOCKER_HOST_IP}"
         ### Fortune ###
         - "gatsu.fortuneidn.local:${DOCKER_HOST_IP}"
         ### Popbela ###
@@ -92,6 +95,9 @@ services:
         - "redback.idntimes.local:${DOCKER_HOST_IP}"
         - "user-api.idntimes.local:${DOCKER_HOST_IP}"
         - "www.idntimes.local:${DOCKER_HOST_IP}"
+        ### Duniaku ###
+        - "otaku.duniaku.local:${DOCKER_HOST_IP}"
+        - "mangaka.duniaku.local:${DOCKER_HOST_IP}"
         ### Fortune ###
         - "gatsu.fortuneidn.local:${DOCKER_HOST_IP}"
         ### Popbela ###

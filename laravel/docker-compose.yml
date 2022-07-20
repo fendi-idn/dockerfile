@@ -32,6 +32,7 @@ services:
         - "user-api.idntimes.local:${DOCKER_HOST_IP}"
         - "www.idntimes.local:${DOCKER_HOST_IP}"
         ### Duniaku ###
+        - "duniaku.local:${DOCKER_HOST_IP}"
         - "otaku.idntimes.local:${DOCKER_HOST_IP}"
         - "mangaka.idntimes.local:${DOCKER_HOST_IP}"
         ### Fortune ###
@@ -96,6 +97,7 @@ services:
         - "user-api.idntimes.local:${DOCKER_HOST_IP}"
         - "www.idntimes.local:${DOCKER_HOST_IP}"
         ### Duniaku ###
+        - "duniaku.local:${DOCKER_HOST_IP}"
         - "otaku.duniaku.local:${DOCKER_HOST_IP}"
         - "mangaka.duniaku.local:${DOCKER_HOST_IP}"
         ### Fortune ###

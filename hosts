@@ -1,0 +1,106 @@
+###﻿# Copyright (c) 1993-2009 Microsoft Corp.
+#
+# This is a sample HOSTS file used by Microsoft TCP/IP for Windows.
+#
+# This file contains the mappings of IP addresses to host names. Each
+# entry should be kept on an individual line. The IP address should
+# be placed in the first column followed by the corresponding host name.
+# The IP address and the host name should be separated by at least one
+# space.
+#
+# Additionally, comments (such as these) may be inserted on individual
+# lines or following the machine name denoted by a '#' symbol.
+#
+# For example:
+#
+#      102.54.94.97     rhino.acme.com          # source server
+#       38.25.63.10     x.acme.com              # x client host
+
+# localhost name resolution is handled within DNS itself.
+127.0.0.1       localhost
+###::1          localhost
+
+# Fortune
+127.0.0.1 gatsu.fortuneidn.local
+127.0.0.1 post-api.fortuneidn.local
+127.0.0.1 api.fortuneidn.local
+127.0.0.1 api-cdn.fortuneidn.local
+127.0.0.1 gateway.fortuneidn.local
+127.0.0.1 cron.fortuneidn.local
+127.0.0.1 cms.fortuneidn.local
+
+# IDNTimes
+127.0.0.1 user-api.idntimes.local
+127.0.0.1 post-api.idntimes.local
+127.0.0.1 community-api.idntimes.local
+127.0.0.1 community.idntimes.local
+127.0.0.1 external-api.idntimes.local
+127.0.0.1 api.cdn.idntimes.local
+127.0.0.1 general-api.idntimes.local
+127.0.0.1 qna-api.idntimes.local
+127.0.0.1 cron.idntimes.local
+127.0.0.1 api.idntimes.local
+127.0.0.1 papaya.idntimes.local
+127.0.0.1 cms.idntimes.local
+127.0.0.1 moderator.idntimes.local
+127.0.0.1 contributor.idntimes.local
+127.0.0.1 rabbitmq.idntimes.local
+127.0.0.1 adaptasibukanhalangan.idntimes.local
+
+# IDNTimes Frontend
+127.0.0.1 idntimes.local
+127.0.0.1 www.idntimes.local
+127.0.0.1 promo.idntimes.local
+127.0.0.1 community.idntimes.local
+127.0.0.1 rappler.idntimes.local
+127.0.0.1 baikitunyata.idntimes.local
+127.0.0.1 pilkada.idntimes.local
+127.0.0.1 ramadan.idntimes.local
+127.0.0.1 akuperempuan.idntimes.local
+127.0.0.1 tanyajawab.idntimes.local
+127.0.0.1 ims.idntimes.local
+127.0.0.1 jatim.idntimes.local
+127.0.0.1 jogja.idntimes.local
+127.0.0.1 kaltim.idntimes.local
+127.0.0.1 business.idntimes.local
+127.0.0.1 olimpiade.idntimes.local
+127.0.0.1 1000aspirasiindonesiamuda.idntimes.local
+127.0.0.1 fyi.idntimes.local
+
+# Popbela
+127.0.0.1 api-cdn.popbela.local
+127.0.0.1 api.popbela.local
+127.0.0.1 external-api.popbela.local
+127.0.0.1 forum-api.popbela.local
+127.0.0.1 jasmine.popbela.local
+127.0.0.1 post-api.popbela.local
+127.0.0.1 rappler.popbela.local
+127.0.0.1 user-api.popbela.local
+
+127.0.0.1 popbela-v2.local www.popbela-v2.local
+
+# Popmama
+127.0.0.1 popmama.local
+127.0.0.1 www.popmama.local
+127.0.0.1 api.popmama.local
+127.0.0.1 hikaru.popmama.local
+127.0.0.1 komugi.popmama.local
+127.0.0.1 internal-api.popmama.local
+127.0.0.1 rappler.popbela.local
+127.0.0.1 myaccount.popmama.local
+
+# Duniaku
+127.0.0.1 duniaku.local
+127.0.0.1 otaku.idntimes.local
+127.0.0.1 mangaka.idntimes.local
+
+# IDN Times - Wowrack
+# 10.100.100.141 www.idntimes.com idntimes.com
+
+
+# Added by Docker Desktop
+192.168.1.8 host.docker.internal
+192.168.1.8 gateway.docker.internal
+# To allow the same kube context to work on the host and the container:
+127.0.0.1 kubernetes.docker.internal
+# End of section
